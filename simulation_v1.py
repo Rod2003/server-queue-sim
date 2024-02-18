@@ -42,25 +42,37 @@ def generatePacket():
 
         # update average variables
         avgQLength[i] = qLength[i] / 1000000
-        print("Average queue length for iteration " + str(i) + " is: " + str(avgQLength[i]))
+        print("Average queue length for iteration " + str(i + 1) + " is: " + str(avgQLength[i]))
 
         # update average queue delay using Little's law
         avgDelay[i] = avgQLength[i] / arrivalRate[i]
-        print("Average queue delay for iteration " + str(i) + " is: " + str(avgDelay[i]))
+        print("Average queue delay for iteration " + str(i + 1) + " is: " + str(avgDelay[i]))
 
         # calculate rho
         rho[i] = (arrivalRate[i] * (1 - serviceRate)) / ((1 - arrivalRate[i]) * serviceRate)
-        print("Rho for iteration " + str(i) + " is: " + str(rho[i]))
+        print("Rho for iteration " + str(i + 1) + " is: " + str(rho[i]))
 
         # get the theoretical average queue delay
         avgDelayTheoretical[i] = (rho[i]) / (arrivalRate[i] * (1 - rho[i]))
-        print("Average theoretical queue delay for iteration " + str(i) + " is: " + str(avgDelayTheoretical[i]))
+        print("Average theoretical queue delay for iteration " + str(i + 1) + " is: " + str(avgDelayTheoretical[i]))
+        print("")
 
 generatePacket()
 
-''' 
-# produce plot
-plt.plot([1,2,3,4])
-plt.ylabel('some numbers')
-plt.show()
-'''
+# produce plot of arrival rate vs queueing delay
+plt.plot(arrivalRate, avgDelay)
+plt.title("Arrival Rate vs Queueing Delay")
+plt.savefig("arrival_vs_queue.png")
+plt.clf()
+
+# produce plot of theoretical curve of arrival rate vs theoretical queueing delay
+plt.plot(arrivalRate, avgDelayTheoretical)
+plt.title("Arrival Rate vs Theoretical Queueing Delay")
+plt.savefig("arrival_vs_queue_theoretical.png")
+plt.clf()
+
+# produce both plots from above
+plt.plot(arrivalRate, avgDelayTheoretical, arrivalRate, avgDelayTheoretical, "r--")
+plt.title("Arrival Rate vs Theoretical Queueing Delay")
+plt.savefig("combined_arrival_queue_theoretical.png")
+plt.clf()
